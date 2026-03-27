@@ -23,6 +23,7 @@ async function getPersonPhone(personId) {
 
 app.post('/webhook/lead', async (req, res) => {
   try {
+    console.log('PAYLOAD:', JSON.stringify(req.body));
     const deal = req.body.current;
     const stageId = deal?.stage_id;
     const personId = deal?.person_id;
