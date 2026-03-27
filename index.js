@@ -23,11 +23,12 @@ async function getPersonPhone(personId) {
 
 app.post('/webhook/lead', async (req, res) => {
   try {
-    console.log('PAYLOAD:', JSON.stringify(req.body));
-    const deal = req.body.current;
+    const deal = req.body.data;
     const stageId = deal?.stage_id;
     const personId = deal?.person_id;
-    const nome = deal?.person_name || deal?.title || 'cliente';
+    const nome = deal?.title || 'cliente';
+
+    console.log(`stage_id: ${stageId}, person_id: ${personId}`);
 
     if (stageId !== STAGE_ID_LEAD) {
       console.log(`Estágio ignorado: ${stageId}`);
@@ -42,7 +43,7 @@ app.post('/webhook/lead', async (req, res) => {
 
     const numero = telefone.startsWith('55') ? telefone : `55${telefone}`;
 
-    const mensagem = `Olá ${nome},\nObrigada pelo interesse na Valometry.\nSomos uma ferramenta de pesquisa especializada em mensuração de valor de marca. Trabalhamos com metodologia proprietária (BVS - Brand Value Score) para ajudar empresas a entender posicionamento competitivo, medir impacto de branding, definir arquitetura de marca ou estruturar tracking contínuo.\n\nPara eu entender melhor como podemos ajudar: qual o principal desafio de marca que vocês enfrentam hoje?\n\nSe fizer sentido, podemos agendar uma conversa para explorar juntos.\nAguardo seu retorno!\nAbraço,\nGabi`;
+    const mensagem = `Olá,\nObrigada pelo interesse na Valometry.\nSomos uma ferramenta de pesquisa especializada em mensuração de valor de marca. Trabalhamos com metodologia proprietária (BVS - Brand Value Score) para ajudar empresas a entender posicionamento competitivo, medir impacto de branding, definir arquitetura de marca ou estruturar tracking contínuo.\n\nPara eu entender melhor como podemos ajudar: qual o principal desafio de marca que vocês enfrentam hoje?\n\nSe fizer sentido, podemos agendar uma conversa para explorar juntos.\nAguardo seu retorno!\nAbraço,\nGabi`;
 
     await fetch(`${EVOLUTION_URL}/message/sendText/${INSTANCE_NAME}`, {
       method: 'POST',
